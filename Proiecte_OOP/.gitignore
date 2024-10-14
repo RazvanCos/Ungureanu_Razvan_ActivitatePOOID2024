@@ -1,0 +1,35 @@
+# Visual Studio files
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio database files
+*.VC.db
+*.opendb
+
+# Build results
+Debug/
+Release/
+x64/
+x86/
+*.obj
+*.exe
+*.dll
+*.pdb
+*.idb
+*.ipch
+*.log
+*.tlog
+
+# NuGet
+*.nupkg
+*.snupkg
+project.lock.json
+*.nuget.props
+*.nuget.targets
+
+# Configuration files
+.vscode/
+.v17/
