@@ -7,6 +7,10 @@ void modifica(int* p) {
 	*p = 30; // modifica valoarea prin pointer
 }
 
+int suma(int a, int b) {
+	return a + b;
+}
+
 void main() {
 	char character = 'a'; // variabile 'character' stocata pe stack(stiva), tipul variabilei: 'char', ocupa 1 octet = 8 biti
 	int intreg = 10; // variabila 'intreg' stocata pe stack, tipul variabile: 'int', ocupa 4 octeti = 32 biti
@@ -56,5 +60,86 @@ void main() {
 	cout << "----------" << endl;
 	int variabila1 = 10;
 	modifica(&variabila1); // transmiterea adresei lui variabila1
-	cout << variabila1; // 
+	cout << variabila1 << endl; // 30 => transmiterea adresei in functii
+
+	// Aritmetica pointerilor
+	cout << "--------------" << endl;
+
+	int intreg2 = 10;
+	double real = 20.20;
+	double real2 = 10.10;
+
+	int* pIntreg2 = &intreg2;
+	double* pReal = &real;
+	double* pReal2 = &real2;
+
+	cout << "Adresa variabilei intreg2 este: " << pIntreg2 << endl;
+	cout << "Adresa variabile real este: " << pReal << endl;
+	
+	pIntreg++; // asigura deplasarea inainte cu sizeof(tip_variabila) exprimat in octeti; in cazul nostru cu 4 octeti
+	cout << "Noua adresa: " << pIntreg << endl;
+	pIntreg = pIntreg - 2; // asigura deplasarea cu sizeof(tip_variabila) exprimat in octeti cu "-2" octeti in cazul nostru
+	cout << "Noua adresa2: " << pIntreg << endl;
+	double newPnt = pReal - pReal2; // numarul de elemente aflate intre cei 2 pointer
+	cout << "New pnt: " << newPnt << endl;
+	
+	// spatiul alocat de catre programator cu ajutorul operatorului new se afla in memoria Heap nu in Stack
+	
+	cout << "---------" << endl;
+
+	// Vectori
+	int initialValues[] = { 1, 0, 5, 30, 2, 12, 9, 8,6, 3 };
+	int* v = new int[10];
+	for (int i = 0; i < 10; i++) {
+		v[i] = initialValues[i];
+	}
+	int a = *v;
+	cout << "Adresa lui v: " << v << endl; // Adresa primului element din array
+	cout << "Valoarea lui v[0]: " << v[0] << endl; // Valoarea primului element
+	cout << "Valoarea lui v[0] scrisa altfel: " << *v << endl; // Valoarea primului element al vectorului
+	cout << "Valoarea stocata la adresa lui v ( v[0] ): " << *v << endl; // valoarea primului element al vectorului
+	cout << a << endl; // valoarea stocata in a care reprezinta valoarea primului element din vector
+
+	cout << "---------" << endl;
+	cout << "Adresa lui &v(pointer la pointer): " << &v << endl; // Adresa pointerului v
+	cout << "Adresa lui &v[0]: " << &v[0] << endl; // Adresa primului element echivalent cu v
+	cout << "Adresa lui &v[1]: " << &v[1] << endl; //Adresa celui de-al doilea element
+	cout << "Valoare lui v[1]: " << v[1] << endl; // Valoarea celui de-al doilea element
+
+	delete[] v; // eliberarea memoriei
+
+	cout << "-----------" << endl;
+
+	//	Pointeri la functii
+
+	int(*pf)(int x, int y); // pointer la o functie cu semnatura int f(int a, int b)
+							// tip returnat(*nume_pointer)(lista parametrii functie)
+	pf = suma; // initializare => nume_pointer = nume_functie;
+
+	int rez = pf(7, 8); // apel functie
+	cout << rez << endl;
+
+	cout << "-------" << endl;
+	
+	/*Referinte
+	-> pointer constanti care vor fi dereferentiati automat de catre compilator */
+
+	int intr = 10;
+	int intr2 = intr; // Valoare lui intr este copiata in intr2; dupa aceasta operatiune, intr si intr2 devin variabile independente;
+					  // Orice modificare a lui intr dupa acest moment nu va afecta valoare lui intr2
+	cout << "Valoarea lui intr: " << intr << endl; // 10
+	cout << "Valoarea lui intre2: " << intr2 << endl; // 10
+	int* pIntr = &intr; // Pointer care stocheaza adresa lui intr
+	int* pIntr2 = &intr2; // Pointer care stocheaza adresa lui intr2
+	cout << "Adresa lui intr este: " << pIntr << endl; // 012FF568
+	cout << "Adresa lui pIntr2 este: " << pIntr2 << endl; //0055F7B8
+
+	intr++; // Incrementare valoarea lui intr
+	cout << "Noua valoare a lui intr: " << intr << endl; // 11
+	cout << "Noua valoare a lui intr2: " << intr2 << endl; // 10
+	int* pIntr3 = &intr;
+	int* pIntr4 = &intr2;
+	cout << "Adresa lui intr dupa incrementare: " << pIntr3 << endl; //012FF568
+	cout << "Adresa noii valori a lui intr2: " << pIntr4 << endl; // 0055F7B8
+	
 }
