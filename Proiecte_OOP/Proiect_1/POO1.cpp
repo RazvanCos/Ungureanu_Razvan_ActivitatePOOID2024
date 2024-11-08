@@ -66,6 +66,19 @@ public:
 			cout << "Nu are abilitati." << endl;
 		}
 	}
+
+	// Metoda statica pentru actualizare salariului in functie de numarul de abilitati
+	static void actualizareSalariu(Angajat& angajat) {
+		if (angajat.nrAbilitati > 3) {
+			int abilitatiSuplimentare = angajat.nrAbilitati - 3;
+			float procentCrestere = 0.1f * abilitatiSuplimentare;
+			angajat.salariu += angajat.salariu * procentCrestere;
+			cout << "Salariul angajatului " << angajat.nume << " a fost actualizat la: " << angajat.salariu << endl;
+		}
+		else {
+			cout << "Angajatul " << angajat.nume << " nu are suficiente abilitati pentru o marire de salariu!" << endl;
+		}
+	}
 };
 
 // declararea si intializarea membrului static in afara clasei
@@ -113,13 +126,14 @@ public:
 		this->nrFeedback = 0;
 		this->feedback = nullptr;
 	}
-
+	// Destructor pentru eliberarea memoriei
 	~Recrutare(){
 		if (this->feedback != nullptr) {
 			delete[] feedback;
 		}
 	}
 
+	// Metoda pentru afisarea angajatilor
 	void afisareRecrutare() {
 		cout << "Recrutare #" << this->id << ": Candidat: " << this->numeCandidat << ", pozitie: " << this->pozitie << ", este in stadiul: " << this->stadiu << endl;
 		if (this->feedback && nrFeedback > 0) {
@@ -130,6 +144,16 @@ public:
 		}
 		else {
 			cout << "Candidatul: " << this->numeCandidat << " nu are feedback momentan!" << endl;
+		}
+	}
+
+	static void actualizareStadiu(Recrutare& recrutare) {
+		if (recrutare.nrFeedback > 3) {
+			recrutare.stadiu = "Interviu final";
+			cout << "Stadiul rectutarii pentru candidatul" << recrutare.numeCandidat << " a fost actualizat la: " << recrutare.stadiu << endl;
+		}
+		else {
+			cout << "Candidatul " << recrutare.numeCandidat << " nu are suficiente feedback-uri pentru a trece la urmatorul stadiu" << endl;
 		}
 	}
 };
@@ -172,13 +196,14 @@ public:
 		this->obiective = nullptr;
 	}
 
-
+	// Destructor pentru eliberarea memoriei
 	~Organizatie(){
 		if (this->obiective != nullptr) {
 			delete[] obiective;
 		}
 	}
 
+	// Metoda pentru afisarea angajatilor
 	void afisareOrganizatie() {
 		cout << "Organizatie: #" << this->id << ", Denumire: " << this->denumire << ", Manager: " << this->manager << endl;
 		if (this->obiective && this->nrObiective > 0) {
@@ -189,6 +214,17 @@ public:
 		}
 		else {
 			cout << "Organizatia: " << this->denumire << " nu are obiective!";
+		}
+	}
+
+	static void actualizareObiective(Organizatie& organizatie) {
+		if (organizatie.nrObiective < 5) {
+			int obiectiveNecesare = 5 - organizatie.nrObiective;
+			cout << "Organizatia " << organizatie.denumire << " are nevoie de " << obiectiveNecesare
+				<< " obiective suplimentare pentr a ajunge la un minim de obiective." << endl;
+		}
+		else {
+			cout << "Organizatia " << organizatie.denumire << " are un numar suficient de obiective: " << organizatie.nrObiective << " obiective." << endl;
 		}
 	}
 };
@@ -202,6 +238,20 @@ int main() {
 	string abilitati[] = { "C++", "Java", "Databases", "Frontend", "Backend" };
 	Angajat a1;
 	Angajat a2("Radu", "software developer", 2000, 5, abilitati);
+
+	// Afisare initiala a angajatilor
+	a1.afisreAngajat();
+	cout << endl;
+	a2.afisreAngajat();
+	cout << endl;
+
+	// Actualizare salarii angajati folosind metoda statica
+	Angajat::actualizareSalariu(a1);
+	Angajat::actualizareSalariu(a2);
+
+	cout << endl;
+
+	// Afisare angajati dupa actualizarea salariilor
 	a1.afisreAngajat();
 	cout << endl;
 	a2.afisreAngajat();
@@ -212,22 +262,43 @@ int main() {
 	Recrutare r1("Virgil", "software developer", "Interviu finalizat", 2, feedback);
 	Recrutare r2;
 	Recrutare r3;
+
+	// Afisare intiala a recrutarilor
 	r1.afisareRecrutare();
 	cout << endl;
 	r2.afisareRecrutare();
 	cout << endl;
 	r3.afisareRecrutare();
 
+	//Actualizare stadiu recrutare folosind meteoda statica
+	Recrutare::actualizareStadiu(r1);
+	Recrutare::actualizareStadiu(r2);
+
+	cout << endl;
+	// Afisare recrutare dupa actualizarea stadiilor
+	r1.afisareRecrutare();
+	r2.afisareRecrutare();
+
 	string obiective[] = {"Imbunatatire performanta", "Extindere pe piata", "Reducere costuri"};
-	/*Organizatie org1("TechCorp", "Popescu Ionut", 3, obiective);*/
+	Organizatie org1("TechCorp", "Popescu Ionut", 3, obiective);
 	Organizatie org2("ITSolution", "Ionescu Marian");
 
-	//org1.afisareOrganizatie();
+	// Afisare intiala a organizatiei
+	org1.afisareOrganizatie();
 	cout << endl;
 	org2.afisareOrganizatie();
 	cout << endl;
 
+	// Verificarea numarului de obiective
+	Organizatie::actualizareObiective(org1);
+	cout << endl;
+	Organizatie::actualizareObiective(org2);
+	cout << endl;
+
+	// Afisare dupa verificare numarului de obiective
+	org1.afisareOrganizatie();
+	org2.afisareOrganizatie();
+
 
 	return 0;
-
 }
