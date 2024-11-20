@@ -4,7 +4,7 @@ using namespace std;
 
 class Angajat {
 
-public:
+private:
 	string nume;
 	string pozitie;
 	float salariu;
@@ -13,7 +13,7 @@ public:
 	static int nrAngajati;
 	string* abilitati;
 
-
+public:
 	// constructor implicit
 	Angajat():id(++nrAngajati) {
 		this->nume = "Necunoscut";
@@ -26,7 +26,7 @@ public:
 	// constructor partial
 	Angajat(string nume, string pozitie, float salariu):id(++nrAngajati){
 		this->nume = nume;
-		this->pozitie = pozitie;
+		this->pozitie = pozitie;    
 		this->salariu = salariu;
 	}
 
@@ -44,15 +44,58 @@ public:
 		}		
 	}
 
+	// constructor de copiere
+	Angajat(const Angajat& a) : id(++nrAngajati) {
+		this->nume = a.nume;
+		this->pozitie = a.pozitie;
+		this->salariu = a.salariu;
+		this->nrAbilitati = a.nrAbilitati;
+		this->abilitati = new string[this->nrAbilitati];
+		for (int i = 0; i < this->nrAbilitati; i++) {
+			this->abilitati[i] = a.abilitati[i];
+		}
+	}
+
 	// Destructor pentru eliberarea memoriei
 	~Angajat() {
 		if (this->abilitati != nullptr) {
 			delete[] abilitati;
 		}
 	}
+
+	// getteri
+	string getNume() { return nume; }
+	string getPozitie() { return pozitie; }
+	float getSalariu() { return salariu; }
+	int getNrAbilitati() { return nrAbilitati; }
+	string* getAbilitati() { return abilitati; }
+	static int getNrAngajati() { return nrAngajati; }
+
+
+	// setteri
+	void setNume(string nume) { this->nume = nume; }
+	void setPozitie(string pozitie) { this->pozitie = pozitie; }
+	void setSalariu(float salariu) { this->salariu = salariu; }
+	void nrAbilitati(int nr) {
+		// eliberare memodie alocata anterior pentru a evita memory leaks
+		delete[] abilitati;
+		nrAbilitati = nr;
+		abilitati = new string[nr];
+	}
+	void setAbilitati(const string* abilitati, int nrAbilitati) {
+		// eliberare memodie 
+		delete[] this->abilitati;
+		this->nrAbilitati = nrAbilitati;
+		this->abilitati = new string[nrAbilitati];
+		for (int i = 0; i < nrAbilitati; i++) {
+			this->abilitati[i] = abilitati[i];
+		}
+	}
+	static void serNrAngajati(int nrAng) { nrAngajati = nrAng; }
+
 	
 	// Metoda pentru afisarea angajatilor
-	void afisreAngajat() {
+	void afisareAngajat() {
 		cout << "Angajatul #" << this->id << ":" << this->nume << ", pozitie: " << this->pozitie
 			<< ", salariu: " << this->salariu << endl;
 		if (this->abilitati && nrAbilitati > 0) {
@@ -87,7 +130,7 @@ int Angajat::nrAngajati = 0;
 
 class Recrutare {
 
-public:
+private:
 	const int id;
 	string numeCandidat;
 	string pozitie;
@@ -96,6 +139,7 @@ public:
 	static int nrRecrutari;
 	string* feedback;
 
+public:
 	// constructor implicit
 	Recrutare(): id(++nrRecrutari){
 		this->numeCandidat = "Necunoscut";
@@ -150,7 +194,7 @@ public:
 	static void actualizareStadiu(Recrutare& recrutare) {
 		if (recrutare.nrFeedback > 3) {
 			recrutare.stadiu = "Interviu final";
-			cout << "Stadiul rectutarii pentru candidatul" << recrutare.numeCandidat << " a fost actualizat la: " << recrutare.stadiu << endl;
+			cout << "Stadiul recrutarii pentru candidatul" << recrutare.numeCandidat << " a fost actualizat la: " << recrutare.stadiu << endl;
 		}
 		else {
 			cout << "Candidatul " << recrutare.numeCandidat << " nu are suficiente feedback-uri pentru a trece la urmatorul stadiu" << endl;
@@ -161,18 +205,19 @@ public:
 int Recrutare::nrRecrutari = 0;
 
 class Organizatie {
-public:
+
+private:
 	const int id;
 	static int nrUnitati;
 	string denumire;
 	string manager;
 	int nrObiective;
 	string* obiective;
-
+public:
 	// constructor implicit
 	Organizatie(): id(++nrUnitati){
 		this->denumire = "Necunoscuta";
-		this->manager = "necunoscut";
+		this->manager = "Necunoscut";
 		this->nrObiective = 0;
 		this->obiective = nullptr;
 	};
@@ -240,9 +285,9 @@ int main() {
 	Angajat a2("Radu", "software developer", 2000, 5, abilitati);
 
 	// Afisare initiala a angajatilor
-	a1.afisreAngajat();
+	a1.afisareAngajat();
 	cout << endl;
-	a2.afisreAngajat();
+	a2.afisareAngajat();
 	cout << endl;
 
 	// Actualizare salarii angajati folosind metoda statica
@@ -252,9 +297,9 @@ int main() {
 	cout << endl;
 
 	// Afisare angajati dupa actualizarea salariilor
-	a1.afisreAngajat();
+	a1.afisareAngajat();
 	cout << endl;
-	a2.afisreAngajat();
+	a2.afisareAngajat();
 	cout << endl;
 
 
